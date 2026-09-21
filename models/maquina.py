@@ -3,7 +3,7 @@ class Maquina:
         self.tipo = None
         self.modelo = None
         self.numero_serie = None
-        self.estado = None
+        self.fallas = []
         self.horas_uso_total = 0.0
         self.historial_de_uso = None
         self.historial_de_manteniniento = None
@@ -24,6 +24,9 @@ class Maquina:
     def set_estado(self, estado):
         self.estado = estado
 
+    def set_falla(self, falla):
+        self.fallas.append(falla)
+
     def get_modelo(self):
         return self.modelo
     
@@ -40,8 +43,12 @@ class Maquina:
         pass
 
     def get_ficha_tecnica(self):
+        lista_fallas = [falla.get_falla() for falla in self.fallas]
+        fallas_str = ", ".join(lista_fallas) if lista_fallas else "Ninguna"
+
         return (f"Modelo: {self.modelo}\n"
                 f"Serie: {self.numero_serie}\n"
                 f"Estado: {self.estado}\n"
                 f"Horas de uso: {self.horas_uso_total}\n"
-                f"Operador: {self.operador}\n")
+                f"Operador: {self.operador}\n"
+                f"Fallas: {fallas_str}")

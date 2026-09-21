@@ -2,6 +2,8 @@ from models.maquina import Maquina
 from services.registrar_maquina import registrar_maquina
 from services.registrar_uso_maquina import registrar_uso_maquina
 from services.registrar_operador import registrar_operador
+from services.asignar_maquina_operador import asignar_maquina_operador
+from services.registrar_falla import registrar_falla
 
 NOMBRE_APP = "AgroFix"
 
@@ -9,6 +11,9 @@ REGISTRAR_MAQUINA = 1
 REGISTRAR_USO_MAQUINA = 2
 REGISTRAR_OPERADOR = 3
 ASIGNAR_MAQUINA_OPERADOR = 4
+LISTA_MAQUINAS = 5
+REGISTRAR_FALLA = 6
+SALIR = 9
 
 lista_maquinas = []
 lista_operadores = []
@@ -21,6 +26,8 @@ while True:
             "2. Registrar uso de una máquina\n"
             "3. Registrar operador\n"
             "4. Asignar máquina a operador\n"
+            "5. Mostrar lista de máquinas\n"
+            "6. Registrar una falla\n"
             "9. Salir\n"
             ))
 
@@ -52,24 +59,18 @@ while True:
                 print(operador.get_datos())
         case 4: 
             print("----- Seleccione el operador al que desea asignar la máquina -----")
-            for operador in lista_operadores:
-                print(f"{lista_operadores.index(operador) + 1}. {operador.get_datos()}\n")
-
-            seleccion_operador = int(input("Ingrese el número de la lista de operadores al que desea asignarle máquina: "))
-
-            operador_seleccionado = lista_operadores[seleccion_operador - 1]
-
-            print ("Ingrese el número de la lista de máquinas que desea asignarle al operador")
+            
+            nuevas_maquinas, nuevos_operadores = asignar_maquina_operador(lista_maquinas, lista_operadores)
+            lista_maquinas = nuevas_maquinas
+            lista_operadores = nuevos_operadores
+        case 5:
             for maquina in lista_maquinas:
-                print(f"{lista_maquinas.index(maquina) + 1}. {maquina.get_ficha_tecnica()}\n")
-            seleccion_maquina = int(input(":"))
+                print(f"{maquina.get_ficha_tecnica()}\n")
+        case 6:
+            print("----- Registrar una falla presentada -----")
 
-            lista_maquinas[seleccion_maquina - 1].set_operador = operador_seleccionado
-
-            print("Lista de máquinas con operador")
-            for maquina in lista_maquinas:
-                if maquina.operador:
-                    print(f"{maquina.get_ficha_tecnica()}\n")
+            nueva_falla = registrar_falla(lista_maquinas)
+            lista_maquinas = nueva_falla
         case 9:
             break
     
